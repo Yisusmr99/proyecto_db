@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Sede;
+use Illuminate\Support\Facades\Validator;
 
 class SedeController extends Controller
 {

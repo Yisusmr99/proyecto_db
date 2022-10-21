@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caja extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-      'usuario_id', 'nombre'
-    ];
+  protected $fillable = [
+    'usuario_id', 'nombre'
+  ];
+  
+  public function usuario()
+  {
+    return $this->hasOne(User::class, 'id', 'usuario_id');
+  }
 }

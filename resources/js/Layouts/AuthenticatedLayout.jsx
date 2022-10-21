@@ -24,8 +24,29 @@ export default function Authenticated({ auth, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('sede.index')} active={route().current('posts.index')}>
-                                    Posts
+                                <NavLink href={route('sede.index')} active={route().current('sede.index')}>
+                                    Sedes
+                                </NavLink>
+                                <NavLink href={route('especialidad.index')} active={route().current('especialidad.index')}>
+                                    Especialidades
+                                </NavLink>
+                                <NavLink href={route('laboratorio.index')} active={route().current('laboratorio.index')}>
+                                    Laboratorios
+                                </NavLink>
+                                <NavLink href={route('cliente.index')} active={route().current('cliente.index')}>
+                                    Clientes
+                                </NavLink>
+                                <NavLink href={route('farmacia.index')} active={route().current('farmacia.index')}>
+                                    Farmacias
+                                </NavLink>
+                                <NavLink href={route('caja.index')} active={route().current('caja.index')}>
+                                    Cajas
+                                </NavLink>
+                                <NavLink href={route('doctor.index')} active={route().current('doctor.index')}>
+                                    Doctores
+                                </NavLink>
+                                <NavLink href={route('cita.index')} active={route().current('cita.index')}>
+                                    Citas
                                 </NavLink>
                             </div>
                         </div>

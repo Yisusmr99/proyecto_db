@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+    laravel-db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: Admin.2022
+            MYSQL_DATABASE: prueba_tecnica_db
+            MYSQL_USER: usr_laravel
+            MYSQL_PASSWORD: admin
+        ports:
+            - 33069:3306
+        volumes:
+            - ./database/schemas/:/var/lib/mysql
+        networks:
+            laravel_prod_net:
+                ipv4_address: 172.16.100.9
+    laravel-prod:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        ports:
+            - 8200:80
+        volumes:
+            - ../proyecto_db:/var/www/
+            - ../proyecto_db/public:/var/www/html
+        networks:
+            laravel_prod_net:
+                ipv4_address: 172.16.100.10
+        depends_on:
+            - laravel-db
+volumes:
+    proyecto_db:
+    database:
+networks:
+    laravel_prod_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                -
+                    subnet: 172.16.100.0/24

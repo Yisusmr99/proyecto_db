@@ -4,19 +4,22 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SedeController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\EspecialidadController;
+use App\Http\Controllers\LaboratorioController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\FarmaciaController;
+use App\Http\Controllers\CajaController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\CitaController;
 
 Route::resource('sede', SedeController::class);
+Route::resource('especialidad', EspecialidadController::class);
+Route::resource('laboratorio', LaboratorioController::class);
+Route::resource('cliente', ClienteController::class);
+Route::resource('farmacia', FarmaciaController::class);
+Route::resource('caja', CajaController::class);
+Route::resource('doctor', DoctorController::class);
+Route::resource('cita', CitasController::class);
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

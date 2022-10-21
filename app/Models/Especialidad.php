@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Especialidad extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-      'nombre',
-      'monto'
-    ];
+  protected $table = 'especialidades';
+
+  protected $fillable = [
+    'nombre',
+    'monto'
+  ];
 }

@@ -4,82 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Models\Laboratorio;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class LaboratorioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $laboratorios = Laboratorio::all();
+        return Inertia::render('Laboratorio/Index', [
+            'laboratorios' => $laboratorios
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return Inertia::render('Laboratorio/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nombre' => ['required'],
+            'monto'  => ['required']
+        ])->validate();
+
+        Laboratorio::create($request->all());
+
+        return redirect()->route('laboratorio.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Laboratorio  $laboratorio
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Laboratorio $laboratorio)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Laboratorio  $laboratorio
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Laboratorio $laboratorio)
     {
-        //
+        return Inertia::render('Laboratorio/Edit', [
+            'laboratorio' => $laboratorio
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Laboratorio  $laboratorio
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Laboratorio $laboratorio)
     {
-        //
+        Validator::make($request->all(), [
+            'nombre' => ['required'],
+            'monto' => ['required']
+        ])->validate();
+
+        Laboratorio::find($laboratorio->id)->update($request->all());
+        return redirect()->route('laboratorio.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Laboratorio  $laboratorio
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Laboratorio $laboratorio)
     {
-        //
+        Laboratorio::find($laboratorio->id)->delete();
+        return redirect()->route('laboratorio.index');
     }
 }
