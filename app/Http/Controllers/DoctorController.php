@@ -3,83 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\Especialidad;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $doctores = Doctor::with('especialidad')->get();
+        return Inertia::render('Doctor/Index', [
+            'doctores' =>  $doctores
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $especialidades = Especialidad::all();
+        return Inertia::render('Doctor/Create', [
+            'especialidades' => $especialidades
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nombres'           => ['required'],
+            'apellidos'         => ['required'],
+            'especialidad_id'   => ['required']
+        ])->validate();
+
+        Doctor::create($request->all());
+
+        return redirect()->route('doctor.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Doctor $doctor)
+    public function edit($id)
     {
-        //
+        $especialidades = Especialidad::all();
+        $doctor = Doctor::find($id);
+        return Inertia::render('Doctor/Edit', [
+            'especialidades' => $especialidades,
+            'doctor'  => $doctor
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Doctor $doctor)
+    public function update($id, Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nombres'           => ['required'],
+            'apellidos'         => ['required'],
+            'especialidad_id'   => ['required']
+        ])->validate();
+
+        Doctor::find($id)->update($request->all());
+        return redirect()->route('doctor.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Doctor $doctor)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Doctor $doctor)
-    {
-        //
+        Doctor::find($id)->delete();
+        return redirect()->route('doctor.index');
     }
 }

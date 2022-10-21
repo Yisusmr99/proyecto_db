@@ -3,83 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\Caja;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class CajaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $cajas = Caja::with('usuario')->get();
+        return Inertia::render('Caja/Index', [
+            'cajas' =>  $cajas
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $usuarios = User::all();
+        return Inertia::render('Caja/Create', [
+            'usuarios' => $usuarios
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nombre'        => ['required'],
+            'usuario_id'    => ['required']
+        ])->validate();
+
+        Caja::create($request->all());
+
+        return redirect()->route('caja.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Caja  $caja
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Caja $caja)
+    public function edit($id)
     {
-        //
+        $usuarios = User::all();
+        $caja = Caja::find($id);
+        return Inertia::render('Caja/Edit', [
+            'usuarios' => $usuarios,
+            'caja'  => $caja
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Caja  $caja
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Caja $caja)
+    public function update($id, Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nombre' => ['required'],
+            'usuario_id'   => ['required']
+        ])->validate();
+
+        Caja::find($id)->update($request->all());
+        return redirect()->route('caja.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Caja  $caja
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Caja $caja)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Caja  $caja
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Caja $caja)
-    {
-        //
+        Caja::find($id)->delete();
+        return redirect()->route('caja.index');
     }
 }

@@ -31,7 +31,7 @@ export default function Dashboard(props) {
                                     className="px-6 py-2 text-white bg-green-500 rounded-md focus:outline-none"
                                     href={ route("sede.create") }
                                 >
-                                    Create Post
+                                    Crear sede
                                 </Link>
                             </div>
 
@@ -45,7 +45,7 @@ export default function Dashboard(props) {
                                 </thead>
                                 <tbody>
                                 {sedes.map(({ id, nombre }) => (
-                                    <tr>
+                                    <tr key={id}>
                                         <td className="border px-4 py-2">{ id }</td>
                                         <td className="border px-4 py-2">{ nombre }</td>
                                         <td className="border px-4 py-2">
@@ -54,7 +54,7 @@ export default function Dashboard(props) {
                                                 className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
                                                 href={route("sede.edit", id)}
                                             >
-                                                Edit
+                                                Editar
                                             </Link>
                                             <button
                                                 onClick={destroy}
@@ -63,7 +63,7 @@ export default function Dashboard(props) {
                                                 type="button"
                                                 className="mx-1 px-4 py-2 text-sm text-white bg-red-500 rounded"
                                             >
-                                                Delete
+                                                Eliminar
                                             </button>
                                         </td>
                                     </tr>
@@ -75,7 +75,7 @@ export default function Dashboard(props) {
                                             className="px-6 py-4 border-t"
                                             colSpan="4"
                                         >
-                                            No contacts found.
+                                            No se encontraron datos.
                                         </td>
                                     </tr>
                                 )}

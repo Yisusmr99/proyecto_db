@@ -1,6 +1,5 @@
 import React from "react";
-import { Inertia } from "@inertiajs/inertia";
-import { InertiaLink, useForm } from "@inertiajs/inertia-react";
+import { useForm } from "@inertiajs/inertia-react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/inertia-react';
 
@@ -18,7 +17,7 @@ const Create = (props) => {
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Create Sede</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Crear Sede</h2>}
         >
             <Head title="Posts" />
 
@@ -32,7 +31,7 @@ const Create = (props) => {
                                     className="px-6 py-2 text-white bg-blue-500 rounded-md focus:outline-none"
                                     href={ route("sede.index") }
                                 >
-                                    Back
+                                    Atras
                                 </Link>
                             </div>
 
@@ -60,7 +59,7 @@ const Create = (props) => {
                                         type="submit"
                                         className="px-6 py-2 font-bold text-white bg-green-500 rounded"
                                     >
-                                        Save
+                                        Guardar
                                     </button>
                                 </div>
                             </form>

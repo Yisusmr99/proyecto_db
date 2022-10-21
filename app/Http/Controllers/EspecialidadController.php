@@ -4,82 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class EspecialidadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $especialidades = Especialidad::all();
+        return Inertia::render('Especialidad/Index', [
+            'especialidades' => $especialidades
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return Inertia::render('Especialidad/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nombre' => ['required'],
+            'monto'  => ['required']
+        ])->validate();
+
+        Especialidad::create($request->all());
+
+        return redirect()->route('especialidad.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Especialidad  $especialidad
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Especialidad $especialidad)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Especialidad  $especialidad
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Especialidad $especialidad)
     {
-        //
+        return Inertia::render('Especialidad/Edit', [
+            'especialidad' => $especialidad
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Especialidad  $especialidad
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Especialidad $especialidad)
     {
-        //
+        Validator::make($request->all(), [
+            'nombre' => ['required'],
+            'monto' => ['required']
+        ])->validate();
+
+        Especialidad::find($especialidad->id)->update($request->all());
+        return redirect()->route('especialidad.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Especialidad  $especialidad
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Especialidad $especialidad)
     {
-        //
+        Especialidad::find($especialidad->id)->delete();
+        return redirect()->route('especialidad.index');
     }
 }
