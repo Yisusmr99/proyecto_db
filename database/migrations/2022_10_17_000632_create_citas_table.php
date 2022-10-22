@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->unsignedBigInteger('doctor_id')->unsigned();
             $table->foreign('doctor_id')->references('id')->on('doctores');
-            $table->unsignedBigInteger('laboratorio_id')->unsigned();
+            $table->unsignedBigInteger('laboratorio_id')->nullable();
             $table->foreign('laboratorio_id')->references('id')->on('laboratorios');
             $table->timestamps();
         });

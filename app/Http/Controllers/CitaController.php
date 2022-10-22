@@ -3,83 +3,110 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cita;
+use App\Models\Doctor;
+use App\Models\Cliente;
+use App\Models\Laboratorio;
+use App\Models\Factura;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CitaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $citas = Cita::with('cliente', 'doctor', 'laboratorio')->where('estado', '!=', 3)->get();
+        return Inertia::render('Cita/Index', [
+            'citas' =>  $citas
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $clientes = Cliente::all();
+        $doctores = Doctor::all();
+        return Inertia::render('Cita/Create', [
+            'clientes' => $clientes,
+            'doctores' => $doctores
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'fecha'         => ['required'],
+            'estado'        => ['required'],
+            'cliente_id'    => ['required'],
+            'doctor_id'     => ['required']
+        ])->validate();
+
+        Cita::create([
+            'fecha' => $request->fecha,
+            'estado' => $request->estado,
+            'cliente_id' => $request->cliente_id,
+            'doctor_id' => $request->doctor_id,
+        ]);
+
+        return redirect()->route('cita.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Cita  $cita
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Cita $cita)
+    public function edit($id)
     {
-        //
+        $clientes = Cliente::all();
+        $doctores = Doctor::all();;
+        $cita = Cita::find($id);
+        return Inertia::render('Cita/Edit', [
+            'clientes' => $clientes,
+            'doctores' => $doctores,
+            'cita'  => $cita
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cita  $cita
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cita $cita)
+    public function update($id, Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'fecha'         => ['required'],
+            'estado'        => ['required'],
+            'cliente_id'    => ['required'],
+            'doctor_id'     => ['required']
+        ])->validate();
+
+        if($request->estado == '3'){
+            Factura::create([
+                'cita_id'   => $id,
+                'estado'    => 1
+            ]);
+        }
+
+        Cita::find($id)->update($request->all());
+        return redirect()->route('cita.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cita  $cita
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cita $cita)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Cita  $cita
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Cita $cita)
     {
         //
+    }
+
+    public function asignarLaboratorio($id)
+    {
+        $cita = Cita::find($id);
+        $laboratorios = Laboratorio::all();
+        return Inertia::render('Cita/AsignarLaboratorio', [
+            'laboratorios' => $laboratorios,
+            'cita'  => $cita
+        ]);
+    }
+
+    public function crearAsignacionLaboratorio(Request $request)
+    {
+        Validator::make($request->all(), [
+            'laboratorio_id'    => ['required'],
+            'cita_id'           => ['required'],
+        ])->validate();
+
+        $cita = Cita::find($request->cita_id);
+        $cita->laboratorio_id = $request->laboratorio_id;
+        $cita->save();
+        return redirect()->route('cita.index');
     }
 }

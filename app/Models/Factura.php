@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Factura extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'cita_id',
+        'nit',
+        'razon_social',
+        'estado',
+    ];
+    public function cita()
+    {
+        return $this->hasOne(Cita::class, 'id', 'cita_id');
+    }
 }

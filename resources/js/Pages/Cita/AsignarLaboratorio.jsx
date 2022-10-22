@@ -3,25 +3,27 @@ import { useForm } from "@inertiajs/inertia-react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/inertia-react';
 
-const Create = (props) => {
+const Asignar = (props) => {
+    const { laboratorios, cita } = usePage().props
     const { data, setData, errors, post } = useForm({
-        nombre: '',
-        usuario_id: ''
+        laboratorio_id: '',
+        cita_id: cita.id
     });
-    const { usuarios } = usePage().props
+    
 
     function handleSubmit(e) {
         e.preventDefault();
-        post(route("caja.store"));
+        post(route("cita.creraLaboratorio"));
+        // put(route("cita.update", cita.id));
     }
 
     return (
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Crear caja</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Asignar laboratorio</h2>}
         >
-            <Head title="Cajas" />
+            <Head title="Citas" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -31,7 +33,7 @@ const Create = (props) => {
                             <div className="flex items-center justify-between mb-6">
                                 <Link
                                     className="px-6 py-2 text-white bg-blue-500 rounded-md focus:outline-none"
-                                    href={ route("caja.index") }
+                                    href={ route("cita.index") }
                                 >
                                     Atras
                                 </Link>
@@ -40,38 +42,36 @@ const Create = (props) => {
                             <form name="createForm" onSubmit={handleSubmit}>
                                 <div className="flex flex-col">
                                     <div className="mb-4">
-                                        <label className="">Nombre</label>
-                                        <input
-                                            type="text"
-                                            className="w-full px-4 py-2"
-                                            label="Nombre"
-                                            name="nombre"
-                                            value={data.nombre}
-                                            onChange={(e) =>
-                                                setData("nombre", e.target.value)
-                                            }
-                                        />
-                                        <span className="text-red-600">
-                                            {errors.nombre}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="mb-4">
-                                        <label className="">Usuario</label>
+                                        <label className="">Cliente</label>
                                         <select className="w-full px-4 py-2" 
                                                 onChange={(e) =>
-                                                    setData("usuario_id", e.target.value)
+                                                    setData("laboratorio_id", e.target.value)
                                                 }
                                         >
                                             <option key={0}>Seleccione una opcion</option>
-                                            {usuarios.map((option) => (
-                                                <option key={option.id} value={option.id}>{option.name}</option>
+                                            {laboratorios.map((option) => (
+                                                <option key={option.id} value={option.id}>
+                                                    Q. {option.monto} - {option.nombre}
+                                                </option>
                                             ))}
                                         </select>
                                         <span className="text-red-600">
-                                            {errors.usuario_id}
+                                            {errors.laboratorio_id}
                                         </span>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col hidden">
+                                    <div className="mb-4">
+                                        <input
+                                            type="text"
+                                            className="w-full px-4 py-2"
+                                            label="Cita"
+                                            name="citaId"
+                                            value={data.cita_id}
+                                            onChange={(e) =>
+                                                setData("cita_id", e.target.value)
+                                            } 
+                                        />
                                     </div>
                                 </div>
                                 <div className="mt-4">
@@ -92,4 +92,4 @@ const Create = (props) => {
     );
 };
 
-export default Create;
+export default Asignar;

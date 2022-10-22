@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->integer('nit');
-            $table->string('razon_social');
+            $table->integer('nit')->nullable();
+            $table->string('razon_social')->nullable();
             $table->unsignedBigInteger('cita_id');
             $table->foreign('cita_id')->references('id')->on('citas');
+            $table->integer('estado');
+            $table->double('monto', 8, 2)->nullable();
             $table->timestamps();
         });
     }
